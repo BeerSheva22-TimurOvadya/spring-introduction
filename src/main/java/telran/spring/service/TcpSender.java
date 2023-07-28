@@ -5,19 +5,20 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import telran.spring.model.EmailMessage;
 import telran.spring.model.Message;
-import telran.spring.model.SmsMessage;
-@Service("sms")
+import telran.spring.model.TcpMessage;
+@Service
 @Slf4j
-public class SmsSender implements Sender {
+public class TcpSender implements Sender {
 
 	@Override
 	public String send(Message message) {
-		log.debug("SMS service received message {}", message);
-		String res = "SMS sender have not received SMS Message";
-		if(message instanceof SmsMessage) {
-			SmsMessage smsMessage = (SmsMessage) message;
-			res = String.format("SMS sender - text: %s has been sent to phone %s", smsMessage.text, smsMessage.phoneNumber);
-		} else {
+		log.debug("TCP service received message {}", message);
+		String res = "TCP sender have not received TcpMessage";
+		if(message instanceof TcpMessage) {
+			TcpMessage tcpMessage = (TcpMessage) message;
+			res = String.format("TCP sender -  text: %s has been sent to host %s:%d", tcpMessage.text,
+					tcpMessage.getHostName(), tcpMessage.getPort());
+		}else {
 			log.error("The message has wrong type");
 			throw new IllegalArgumentException(res);
 		}
@@ -27,13 +28,13 @@ public class SmsSender implements Sender {
 	@Override
 	public String getMessageTypeString() {
 		
-		return "sms";
+		return "tcp";
 	}
 
 	@Override
 	public Class<? extends Message> getMessageTypeObject() {
 		
-		return SmsMessage.class;
+		return TcpMessage.class;
 	}
 
 }
