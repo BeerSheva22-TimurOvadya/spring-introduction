@@ -48,16 +48,15 @@ public class SenderController {
 		return res;
 	}
 	@PostConstruct
-	void init() {
-		
+	void init() {		
 		sendersMap = sendersList.stream().collect(Collectors.toMap(Sender::getMessageTypeString, s -> s));
 		sendersList.forEach(s -> mapper.registerSubtypes(s.getMessageTypeObject()));
 		log.info("registred senders: {}", sendersMap.keySet());
 		
 	}
+	
 	@PreDestroy
-	void shutdown() {
-		//
+	void shutdown() {		
 		log.info("context closed");
 	}
 }
