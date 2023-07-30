@@ -32,12 +32,10 @@ public class SenderController {
 	String send(@RequestBody @Valid Message message) {
 		log.debug("controller received message {}", message);
 		Sender sender = sendersMap.get(message.type);
-		String resWrong = "Wrong message type " + message.type;
+		String resWrong = message.type + " type not found";
 		String res = null;
 		if (sender != null) {
-
 			res = sender.send(message);
-
 		} else {
 			throw new NotFoundException(resWrong);
 		}
