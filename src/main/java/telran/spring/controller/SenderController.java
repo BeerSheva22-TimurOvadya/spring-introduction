@@ -15,6 +15,7 @@ import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import telran.spring.exceptions.NotFoundException;
 import telran.spring.model.Message;
 import telran.spring.service.Sender;
 
@@ -26,35 +27,32 @@ public class SenderController {
 	Map<String, Sender> sendersMap;
 	final List<Sender> sendersList;
 	final ObjectMapper mapper;
+
 	@PostMapping
-	ResponseEntity<String> send(@RequestBody @Valid Message message) {
+	String send(@RequestBody @Valid Message message) {
 		log.debug("controller received message {}", message);
 		Sender sender = sendersMap.get(message.type);
 		String resWrong = "Wrong message type " + message.type;
-		String resRight = null;
-		ResponseEntity<String> res = ResponseEntity.badRequest().body(resWrong);
+		String res = null;
 		if (sender != null) {
-			
-			try {
-				resRight = sender.send(message);
-				res = ResponseEntity.ok().body(resRight);
-			} catch (Exception e) {
-				res = ResponseEntity.badRequest().body(e.getMessage());
-			}
-			
+
+			res = sender.send(message);
+
 		} else {
-			log.error(resWrong);;
+			throw new NotFoundException(resWrong);
 		}
 		return res;
 	}
+
 	@PostConstruct
 	void init() {
-		
+
 		sendersMap = sendersList.stream().collect(Collectors.toMap(Sender::getMessageTypeString, s -> s));
 		sendersList.forEach(s -> mapper.registerSubtypes(s.getMessageTypeObject()));
 		log.info("registred senders: {}", sendersMap.keySet());
-		
+
 	}
+
 	@PreDestroy
 	void shutdown() {
 		//

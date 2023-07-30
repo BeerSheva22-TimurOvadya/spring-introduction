@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class EmailMessage extends Message {
 	@Email
-public String emailAddress;
+	public String emailAddress;
 }
