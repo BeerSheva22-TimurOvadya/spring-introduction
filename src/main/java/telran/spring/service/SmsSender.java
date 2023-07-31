@@ -7,14 +7,14 @@ import telran.spring.model.EmailMessage;
 import telran.spring.model.Message;
 import telran.spring.model.SmsMessage;
 
-@Service("sms")
+@Service
 @Slf4j
 public class SmsSender implements Sender {
 
 	@Override
 	public String send(Message message) {
 		log.debug("SMS service received message {}", message);
-		String res =errorMessage;
+		String res = errorMessage;
 		if (message instanceof SmsMessage) {
 			SmsMessage smsMessage = (SmsMessage) message;
 			res = String.format("SMS sender - text: %s has been sent to phone %s", smsMessage.text,
