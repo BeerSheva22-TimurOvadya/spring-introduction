@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +25,7 @@ public class GlobalExceptionsHandler {
 		return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler({ IllegalArgumentException.class, HttpMessageNotReadableException.class, IllegalStateException.class })
+	@ExceptionHandler({ IllegalArgumentException.class, HttpMessageNotReadableException.class, IllegalStateException.class, JsonProcessingException.class })
 	ResponseEntity<String> illegalArgumentHandler(RuntimeException e) {
 		String errorMessage = e.getMessage();
 		log.error(errorMessage);
