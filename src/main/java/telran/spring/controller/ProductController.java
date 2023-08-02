@@ -8,6 +8,7 @@ import telran.spring.service.ProductService;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
@@ -19,6 +20,11 @@ public class ProductController {
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
         return productService.addProduct(product);
+    }
+    
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
     @GetMapping("/category/{category}")
@@ -40,4 +46,10 @@ public class ProductController {
     public void deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
     }
+    
+    @PostMapping("/batch")
+    public List<Product> addProducts(@RequestBody List<Product> products) {
+        return productService.addProducts(products);
+    }
+
 }
