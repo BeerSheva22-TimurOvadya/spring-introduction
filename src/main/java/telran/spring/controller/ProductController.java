@@ -33,17 +33,17 @@ public class ProductController {
     }
 
     @GetMapping("/price")
-    public List<Product> getProductsByPrice(@RequestParam double maxPrice) {
+    public List<Product> getProductsByPrice(@RequestParam int maxPrice) {
         return productService.getProductsByPrice(maxPrice);
     }
 
     @PutMapping("/{id}")
-    public Product editProduct(@PathVariable String id, @RequestBody Product product) {
+    public Product editProduct(@PathVariable int id, @RequestBody Product product) {
         return productService.editProduct(id, product);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable String id) {
+    public void deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
     }
     

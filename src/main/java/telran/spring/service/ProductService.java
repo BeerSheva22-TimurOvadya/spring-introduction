@@ -11,14 +11,13 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @Slf4j
 public class ProductService {
-	private Map<String, Product> productsById = new HashMap<>();
+	private Map<Integer, Product> productsById = new HashMap<>();
 	private Map<String, List<Product>> productsByCategory = new HashMap<>();
-	private TreeMap<Double, List<Product>> productsByPrice = new TreeMap<>();
+	private TreeMap<Integer, List<Product>> productsByPrice = new TreeMap<>();
 
 	public Product addProduct(Product product) {
-		String id = generateUniqueId();
+		int id = generateUniqueId();
 		product.setId(id);
-
 		productsById.put(id, product);
 		productsByCategory.computeIfAbsent(product.getCategory(), k -> new ArrayList<>()).add(product);
 		productsByPrice.computeIfAbsent(product.getPrice(), k -> new ArrayList<>()).add(product);
@@ -39,35 +38,35 @@ public class ProductService {
 		return result;
 	}
 
-	public List<Product> getProductsByPrice(double maxPrice) {
+	public List<Product> getProductsByPrice(int maxPrice) {
 		List<Product> result = new ArrayList<>();
 		productsByPrice.headMap(maxPrice).values().forEach(result::addAll);
 		log.info("Products have been retrieved by max price: " + maxPrice);
 		return result;
 	}
 
-	private String generateUniqueId() {
-		String id;
-		do {
-			id = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
-		} while (productsById.containsKey(id));
-		return id;
-	}
+	private Integer generateUniqueId() {
+        Integer id;
+        do {
+            id = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        } while (productsById.containsKey(id));
+        return id;
+    }
+	
 
-	public Product editProduct(String id, Product product) {
-		removeProductFromMaps(productsById.get(id));
-		product.setId(id);
-		addProductToMaps(product);
-		productsById.put(id, product);
-		log.info("Edited product: " + product);
-		return product;
-	}
+	public Product editProduct(int id, Product product) {
+        removeProductFromMaps(productsById.get(id));
+        product.setId(id);
+        addProductToMaps(product);
+        productsById.put(id, product);
+        log.info("Edited product: " + product);
+        return product;
+    }
 
-	public void deleteProduct(String id) {
-		removeProductFromMaps(productsById.remove(id));
-		log.info("Deleted product by ID: " + id);
-
-	}
+	public void deleteProduct(int id) {
+        removeProductFromMaps(productsById.remove(id));
+        log.info("Deleted product by ID: " + id);
+    }
 
 	private void addProductToMaps(Product product) {
 		productsByCategory.computeIfAbsent(product.getCategory(), k -> new ArrayList<>()).add(product);
