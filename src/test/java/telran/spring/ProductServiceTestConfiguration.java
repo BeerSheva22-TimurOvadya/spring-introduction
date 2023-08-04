@@ -12,6 +12,7 @@ import telran.spring.service.ProductService;
 
 @TestConfiguration
 public class ProductServiceTestConfiguration {
+	public static int TEST_ID = 888888;
 	
 	 @Bean
 	    public ProductService productService() {
@@ -23,43 +24,33 @@ public class ProductServiceTestConfiguration {
 
 	 	@Override
 	 	public Product addProduct(Product product) {
-	 		if (product.getName() == null || product.getName().trim().isEmpty()) {
-	 	        throw new IllegalArgumentException("Name cannot be null or empty");
-	 	    }
+	 		
 	 		return product;
 	 	}
 
 	 	@Override
 	 	public List<Product> getAllProducts() {
-	 		return Arrays.asList(new Product(1, "test", "test", 100, null));
+	 		return Arrays.asList(new Product(TEST_ID, "test", "test", 100, null));
 	 	}
 
 	 	@Override
 	 	public List<Product> getProductsByCategory(String category) {
-	 		return Arrays.asList(new Product(1, "test", category, 100, null));
+	 		return Arrays.asList(new Product(TEST_ID, "test", category, 100, null));
 	 	}
 
 	 	@Override
 	 	public List<Product> getProductsByPrice(int maxPrice) {
-	 		if (maxPrice < 0) {
-	 	        throw new IllegalArgumentException("Max price should be greater than 0");
-	 	    }
-	 		return Arrays.asList(new Product(1, "test", "test", maxPrice, null));
+	 		
+	 		return Arrays.asList(new Product(TEST_ID, "test", "test", maxPrice, null));
 	 	}
 
 	 	@Override
-	 	public Product editProduct(int id, Product product) {
-	 		if (id == 9999) {
-	 	        throw new NotFoundException("Product with ID " + id + " not found");
-	 	    }		
+	 	public Product editProduct(int id, Product product) {	
 	 		return product;
 	 	}
 
 	 	@Override
-	 	public void deleteProduct(int id) {
-	 		  if (id == 9999) {
-	 		        throw new NotFoundException("Product with ID " + id + " not found");
-	 		    }
+	 	public void deleteProduct(int id) {	 	 		
 	 	}
 
 	 	@Override

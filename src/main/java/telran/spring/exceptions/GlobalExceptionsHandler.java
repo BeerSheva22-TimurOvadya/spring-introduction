@@ -62,5 +62,6 @@ public class GlobalExceptionsHandler {
 	    log.error(errorMessage);
 	    return new ResponseEntity<>(errorMessage, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
-
+	
+	
 }

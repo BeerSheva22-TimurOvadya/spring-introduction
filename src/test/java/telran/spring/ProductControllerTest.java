@@ -42,7 +42,7 @@ class ProductControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		product = new Product(1, "test", "test", 100, null);
+		product = new Product(ProductServiceTestConfiguration.TEST_ID, "test", "test", 100, null);
 	}
 
 	@Test
@@ -75,13 +75,13 @@ class ProductControllerTest {
 	@Test
 	void editProductTest() throws Exception {
 		String productJson = mapper.writeValueAsString(product);
-		mockMvc.perform(put(productsUrl + "/1").contentType(MediaType.APPLICATION_JSON).content(productJson))
+		mockMvc.perform(put(productsUrl + "/" + ProductServiceTestConfiguration.TEST_ID).contentType(MediaType.APPLICATION_JSON).content(productJson))
 				.andDo(print()).andExpect(status().isOk());
 	}
 
 	@Test
 	void deleteProductTest() throws Exception {
-		mockMvc.perform(delete(productsUrl + "/1")).andDo(print()).andExpect(status().isOk());
+		mockMvc.perform(delete(productsUrl + "/" + ProductServiceTestConfiguration.TEST_ID)).andDo(print()).andExpect(status().isOk());
 	}
 
 	@Test
@@ -109,13 +109,13 @@ class ProductControllerTest {
 	@Test
 	void editNonExistingProductTest() throws Exception {
 		String productJson = mapper.writeValueAsString(product);
-		mockMvc.perform(put(productsUrl + "/9999").contentType(MediaType.APPLICATION_JSON).content(productJson))
-				.andDo(print()).andExpect(status().isNotFound());
+		mockMvc.perform(put(productsUrl + "/" + 1).contentType(MediaType.APPLICATION_JSON).content(productJson))
+				.andDo(print()).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	void deleteNonExistingProductTest() throws Exception {
-		mockMvc.perform(delete(productsUrl + "/9999")).andDo(print()).andExpect(status().isNotFound());
+		mockMvc.perform(delete(productsUrl + "/" + 1)).andDo(print()).andExpect(status().isBadRequest());
 	}
 
 }

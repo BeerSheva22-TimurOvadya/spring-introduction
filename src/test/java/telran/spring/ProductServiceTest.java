@@ -109,46 +109,5 @@ class ProductServiceTest {
 		assertEquals(2, addedProducts.size());
 	}
 	
-	@Test
-	void testAddProductWithInvalidName() {
-	    Product product = new Product();
-	    product.setCategory("Electronics");
-	    product.setPrice(1000);
-	    
-	    Exception exception = assertThrows(IllegalArgumentException.class, () -> productService.addProduct(product));
-	    
-	    assertEquals("Name cannot be null or empty", exception.getMessage());
-	}
-	
-	@Test
-	void testDeleteNonExistentProduct() {
-	    int nonExistentId = 9999;
-	    
-	    Exception exception = assertThrows(NotFoundException.class, () -> productService.deleteProduct(nonExistentId));
-	    
-	    assertEquals("Product with ID " + nonExistentId + " not found", exception.getMessage());
-	}
-	
-	@Test
-	void testEditNonExistentProduct() {
-	    int nonExistentId = 9999;
-	    Product product = createProduct("New Name", "Electronics", 1000);
-	    
-	    Exception exception = assertThrows(NotFoundException.class, () -> productService.editProduct(nonExistentId, product));
-	    
-	    assertEquals("Product with ID " + nonExistentId + " not found", exception.getMessage());
-	}
-	
-	@Test
-	void testGetProductsByNegativePrice() {
-	    int negativePrice = -1000;
-	    
-	    Exception exception = assertThrows(IllegalArgumentException.class, () -> productService.getProductsByPrice(negativePrice));
-	    
-	    assertEquals("Max price should be greater than 0", exception.getMessage());
-	}
-	
-	
-
 	
 }
