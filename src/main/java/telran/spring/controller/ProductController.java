@@ -24,8 +24,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product addProduct(@RequestBody @Valid Product product) {
-        log.info("Adding product: " + product);
+    public Product addProduct(@RequestBody @Valid Product product) {        
         return productService.addProduct(product);
     }
 
@@ -42,7 +41,7 @@ public class ProductController {
     }
 
     @GetMapping("/price")
-    public List<Product> getProductsByPrice(@RequestParam @Min(0) int maxPrice) {
+    public List<Product> getProductsByPrice(@RequestParam @Min(0) double maxPrice) {
         log.info("Products have been retrieved by max price: " + maxPrice);
         return productService.getProductsByPrice(maxPrice);
     }

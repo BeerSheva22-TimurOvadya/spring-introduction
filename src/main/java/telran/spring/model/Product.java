@@ -24,7 +24,7 @@ public class Product {
     private String category;
 
     @Min(value = 0, message = "Price must be non-negative")
-    private int price;
+    private double price;
 
     private String additionalFields;
 }

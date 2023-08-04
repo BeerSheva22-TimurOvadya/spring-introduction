@@ -39,7 +39,7 @@ public class ProductServiceTestConfiguration {
 	 	}
 
 	 	@Override
-	 	public List<Product> getProductsByPrice(int maxPrice) {
+	 	public List<Product> getProductsByPrice(double maxPrice) {
 	 		
 	 		return Arrays.asList(new Product(TEST_ID, "test", "test", maxPrice, null));
 	 	}

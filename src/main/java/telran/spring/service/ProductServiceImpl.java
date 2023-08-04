@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ProductServiceImpl implements ProductService {
 	private Map<Integer, Product> productsById = new HashMap<>();
 	private Map<String, List<Product>> productsByCategory = new HashMap<>();
-	private TreeMap<Integer, List<Product>> productsByPrice = new TreeMap<>();
+	private TreeMap<Double, List<Product>> productsByPrice = new TreeMap<>();
 
 	private static final String FILE_NAME = "products.json";
 
@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 		productsById.put(id, product);
 		productsByCategory.computeIfAbsent(product.getCategory(), k -> new ArrayList<>()).add(product);
 		productsByPrice.computeIfAbsent(product.getPrice(), k -> new ArrayList<>()).add(product);
-
+		log.info("Adding product: " + product);
 		return product;
 	}
 
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 		return result;
 	}
 
-	public List<Product> getProductsByPrice(int maxPrice) {
+	public List<Product> getProductsByPrice(double maxPrice) {
 		List<Product> result = new ArrayList<>();
 		productsByPrice.headMap(maxPrice).values().forEach(result::addAll);
 		return result;
