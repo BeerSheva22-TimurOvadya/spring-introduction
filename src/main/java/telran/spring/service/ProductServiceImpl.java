@@ -1,13 +1,16 @@
 package telran.spring.service;
 
+
 import org.springframework.stereotype.Service;
 
 import telran.spring.exceptions.NotFoundException;
 import telran.spring.model.Product;
-import telran.spring.service.ProductService;
+
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -41,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	public List<Product> getProductsByPrice(int maxPrice) {
-	    if (maxPrice <= 0) {
+	    if (maxPrice < 0) {
 	        throw new IllegalArgumentException("Max price should be greater than 0");
 	    }
 	    List<Product> result = new ArrayList<>();
@@ -59,13 +62,17 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	public Product editProduct(int id, Product product) {
-        removeProductFromMaps(productsById.get(id));
-        product.setId(id);
-        addProductToMaps(product);
-        productsById.put(id, product);
-       
-        return product;
-    }
+	    Product editedProduct = productsById.get(id);
+	    if (editedProduct == null) {
+	        throw new NotFoundException("Product with ID " + id + " not found");
+	    }
+	    removeProductFromMaps(editedProduct);
+	    product.setId(id);
+	    addProductToMaps(product);
+	    productsById.put(id, product);
+	    
+	    return product;
+	}
 
 	public void deleteProduct(int id) {
 	    Product product = productsById.remove(id);
@@ -91,5 +98,11 @@ public class ProductServiceImpl implements ProductService {
 			addedProducts.add(addProduct(product));
 		}
 		return addedProducts;
+	}
+	
+	public void clear() {
+	    productsById.clear();
+	    productsByCategory.clear();
+	    productsByPrice.clear();
 	}
 }

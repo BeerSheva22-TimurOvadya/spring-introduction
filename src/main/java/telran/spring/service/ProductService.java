@@ -10,5 +10,5 @@ public interface ProductService {
     List<Product> getProductsByPrice(int maxPrice);
     Product editProduct(int id, Product product);
     void deleteProduct(int id);
-    List<Product> addProducts(List<Product> products);
+    List<Product> addProducts(List<Product> products);    
 }

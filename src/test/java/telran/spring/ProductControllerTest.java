@@ -9,60 +9,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
+
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import telran.spring.controller.ProductController;
 import telran.spring.model.Product;
-import telran.spring.service.ProductService;
+
 
 import java.util.Arrays;
 import java.util.List;
 
-@Service
-class MockProductService implements ProductService {
 
-	@Override
-	public Product addProduct(Product product) {
-		return product;
-	}
 
-	@Override
-	public List<Product> getAllProducts() {
-		return Arrays.asList(new Product(1, "test", "test", 100, null));
-	}
 
-	@Override
-	public List<Product> getProductsByCategory(String category) {
-		return Arrays.asList(new Product(1, "test", category, 100, null));
-	}
-
-	@Override
-	public List<Product> getProductsByPrice(int maxPrice) {
-		return Arrays.asList(new Product(1, "test", "test", maxPrice, null));
-	}
-
-	@Override
-	public Product editProduct(int id, Product product) {
-		return product;
-	}
-
-	@Override
-	public void deleteProduct(int id) {
-	}
-
-	@Override
-	public List<Product> addProducts(List<Product> products) {
-		return products;
-	}
-
-}
-
-@WebMvcTest({ ProductController.class, MockProductService.class })
+@WebMvcTest({ ProductController.class })
+@Import(ProductServiceTestConfiguration.class)
 class ProductControllerTest {
 	@Autowired
 	MockMvc mockMvc;
