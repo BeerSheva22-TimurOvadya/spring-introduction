@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>telran.spring</groupId>
-	<artifactId>spring-introduction</artifactId>
+	<artifactId>spring-intorduction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-inroduction</name>
+	<name>spring-intorduction</name>
 	<description>Message Senders</description>
 	<properties>
 		<java.version>17</java.version>
@@ -20,6 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<!--Какие bin-ы нужно поместить в аппликационный контекст для валидации-->
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
@@ -40,7 +41,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<!--Какие bin-ы нужно поместить в аппликационный контекст для теста-->
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
