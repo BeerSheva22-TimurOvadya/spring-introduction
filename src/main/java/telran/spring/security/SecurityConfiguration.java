@@ -33,7 +33,6 @@ public class SecurityConfiguration {
 	
 	@Bean
 	SecurityFilterChain configure(HttpSecurity httpSec) throws Exception {
-
 		return httpSec.csrf(custom -> custom.disable()).cors(custom -> custom.disable())
 				.authorizeHttpRequests(custom -> custom.requestMatchers(HttpMethod.GET).authenticated()
 						.anyRequest().hasRole("ADMIN"))
