@@ -26,9 +26,9 @@ public class SecurityConfiguration {
 	@Value("${app.security.admin.name:admin}")
 	String usernameForAdmin;
 	
-	@Value("${app.security.user.password:${USER_PASSWORD}}")
+	@Value("${app.security.user.password}")
 	String passwordForUser;
-	@Value("${app.security.admin.password:${ADMIN_PASSWORD}}")
+	@Value("${app.security.admin.password}")
 	String passwordForAdmin;
 	
 	@Bean

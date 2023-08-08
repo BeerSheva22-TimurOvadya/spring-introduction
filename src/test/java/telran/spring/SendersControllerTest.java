@@ -1,6 +1,7 @@
 package telran.spring;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import telran.spring.controller.SenderController;
 import telran.spring.model.Message;
+import telran.spring.security.SecurityConfiguration;
 import telran.spring.service.Sender;
 
 @Service
@@ -39,8 +42,8 @@ class MockSender implements Sender {
 	}
 
 }
-
-@WebMvcTest({ SenderController.class, MockSender.class })
+@WithMockUser(roles = {"USER", "ADMIN"})
+@WebMvcTest({ SenderController.class, MockSender.class, SecurityConfiguration.class })
 class SendersControllerTest {
 	@Autowired
 	MockMvc mockMvc;
@@ -73,9 +76,9 @@ class SendersControllerTest {
 	}
 
 	private ResultActions getRequestBase(String messageJson) throws Exception {
-		return mockMvc.perform(post(sendUrl).contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print());
-	}
+	    return mockMvc.perform(post(sendUrl).contentType(MediaType.APPLICATION_JSON).content(messageJson))
+	        .andDo(print());
+	  }
 
 	@Test
 	void sendNotFoundFlow() throws Exception {
