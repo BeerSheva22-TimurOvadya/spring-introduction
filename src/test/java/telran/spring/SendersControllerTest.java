@@ -42,7 +42,8 @@ class MockSender implements Sender {
 	}
 
 }
-@WithMockUser(roles = {"USER", "ADMIN"})
+
+@WithMockUser(roles = { "USER", "ADMIN" })
 @WebMvcTest({ SenderController.class, MockSender.class, SecurityConfiguration.class })
 class SendersControllerTest {
 	@Autowired
@@ -75,10 +76,18 @@ class SendersControllerTest {
 		assertEquals("test", response);
 	}
 
+	
+	@Test
+	@WithMockUser(roles = { "USER" }, username = "admin")	
+	void sendFlow403()  throws Exception {
+		String messageJson = mapper.writeValueAsString(message);
+		getRequestBase(messageJson).andExpect(status().isForbidden());				
+	}
+	
 	private ResultActions getRequestBase(String messageJson) throws Exception {
-	    return mockMvc.perform(post(sendUrl).contentType(MediaType.APPLICATION_JSON).content(messageJson))
-	        .andDo(print());
-	  }
+		return mockMvc.perform(post(sendUrl).contentType(MediaType.APPLICATION_JSON).content(messageJson))
+				.andDo(print());
+	}
 
 	@Test
 	void sendNotFoundFlow() throws Exception {
@@ -105,47 +114,44 @@ class SendersControllerTest {
 		String[] typesResponse = mapper.readValue(responseJson, String[].class);
 		assertArrayEquals(new String[] { "test" }, typesResponse);
 	}
-	
+
 	@Test
 	void isTypePathExists() throws Exception {
-		String responseJson = mockMvc.perform(get(isTypePathUrl + "/test")).andDo(print()).andExpect(status().isOk()).andReturn()
-				.getResponse().getContentAsString();
+		String responseJson = mockMvc.perform(get(isTypePathUrl + "/test")).andDo(print()).andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
 		boolean booleanResponse = mapper.readValue(responseJson, boolean.class);
 		assertTrue(booleanResponse);
 	}
-	
+
 	@Test
 	void isTypePathNotExists() throws Exception {
-		String responseJson = mockMvc.perform(get(isTypePathUrl + "/test1")).andDo(print()).andExpect(status().isOk()).andReturn()
-				.getResponse().getContentAsString();
+		String responseJson = mockMvc.perform(get(isTypePathUrl + "/test1")).andDo(print()).andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
 		boolean booleanResponse = mapper.readValue(responseJson, boolean.class);
 		assertFalse(booleanResponse);
 	}
-	
+
 	@Test
 	void isTypePathParamExists() throws Exception {
-		String responseJson = mockMvc.perform(get(isTypePathUrl + "?type=test")).andDo(print()).andExpect(status().isOk()).andReturn()
-				.getResponse().getContentAsString();
+		String responseJson = mockMvc.perform(get(isTypePathUrl + "?type=test")).andDo(print())
+				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 		boolean booleanResponse = mapper.readValue(responseJson, boolean.class);
-		assertTrue(booleanResponse);		
+		assertTrue(booleanResponse);
 	}
-	
+
 	@Test
 	void isTypePathParamNotExists() throws Exception {
-		String responseJson = mockMvc.perform(get(isTypePathUrl + "?type=test1")).andDo(print()).andExpect(status().isOk()).andReturn()
-				.getResponse().getContentAsString();
+		String responseJson = mockMvc.perform(get(isTypePathUrl + "?type=test1")).andDo(print())
+				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 		boolean booleanResponse = mapper.readValue(responseJson, boolean.class);
-		assertFalse(booleanResponse);		
+		assertFalse(booleanResponse);
 	}
-	
+
 	@Test
 	void isTypePathParamMissing() throws Exception {
-		String responseJson = mockMvc.perform(get(isTypePathUrl)).andDo(print()).andExpect(status().isBadRequest()).andReturn()
-				.getResponse().getContentAsString();		
-		assertEquals("isTypeExistsParam.type: must not be empty", responseJson);		
+		String responseJson = mockMvc.perform(get(isTypePathUrl)).andDo(print()).andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+		assertEquals("isTypeExistsParam.type: must not be empty", responseJson);
 	}
-	
-	
-
 
 }
