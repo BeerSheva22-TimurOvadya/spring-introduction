@@ -27,7 +27,7 @@ class EmailSenderTest {
 		message.text = "text";
 		message.emailAddress = "test@gmail.com";
 		String expected = String.format("email sender -  text: %s has been sent to mail %s", message.text,
-				message.emailAddress);
+				message.emailAddress);		
 		assertEquals(expected, sender.send(message));
 	}
 
