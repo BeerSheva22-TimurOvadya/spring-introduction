@@ -3,8 +3,8 @@ package telran.spring;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class SpringInroductionApplicationTests {
+@SpringBootTest(properties= {"app.security.admin.password=ppp"})
+class SpringIntroductionApplicationTests {
 
 	@Test
 	void contextLoads() {

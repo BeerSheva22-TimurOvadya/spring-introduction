@@ -31,7 +31,6 @@ public class SenderController {
 	Map<String, Sender> sendersMap;
 	final List<Sender> sendersList;
 	final ObjectMapper mapper;
-
 	@PostMapping
 	String send(@RequestBody @Valid Message message) {
 		log.debug("controller received message {}", message);
@@ -39,39 +38,40 @@ public class SenderController {
 		String resWrong = message.type + " type not found";
 		String res = null;
 		if (sender != null) {
-			res = sender.send(message);
+			
+				res = sender.send(message);
+		
+			
 		} else {
 			throw new NotFoundException(resWrong);
 		}
 		return res;
 	}
-
 	@GetMapping
 	Set<String> getTypes() {
 		return sendersMap.keySet();
 	}
-
 	@GetMapping("type/{typeName}")
-	boolean isTypeExistsPath(@PathVariable(name = "typeName") String type) {
-		log.debug("Type inside a path()", type);
+	boolean isTypeExistsPath(@PathVariable(name="typeName") String type) {
+		log.debug("Type inside a path {}", type);
 		return sendersMap.containsKey(type);
 	}
-
 	@GetMapping("type")
 	boolean isTypeExistsParam(@RequestParam(name = "type", defaultValue = "") @NotEmpty String type) {
-		log.debug("Type inside a parameter()", type);
+		log.debug("Type inside a parameter {}", type);
 		return sendersMap.containsKey(type);
 	}
-
 	@PostConstruct
 	void init() {
+		
 		sendersMap = sendersList.stream().collect(Collectors.toMap(Sender::getMessageTypeString, s -> s));
 		sendersList.forEach(s -> mapper.registerSubtypes(s.getMessageTypeObject()));
 		log.info("registred senders: {}", sendersMap.keySet());
+		
 	}
-
 	@PreDestroy
 	void shutdown() {
+		//
 		log.info("context closed");
 	}
 }
