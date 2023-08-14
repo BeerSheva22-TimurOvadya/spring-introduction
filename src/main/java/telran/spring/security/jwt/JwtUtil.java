@@ -27,7 +27,7 @@ public class JwtUtil {
 	long expPeriod;
 	
 	public String extractUserName(String token) {		
-		return extractClaim(token, Claims::getSubject);
+		return extractClaim(token, Claims::getSubject);		
 	}
 
 	public Date extractExpirationDate(String token) {
