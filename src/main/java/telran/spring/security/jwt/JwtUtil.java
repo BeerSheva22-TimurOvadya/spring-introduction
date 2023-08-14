@@ -3,6 +3,7 @@ package telran.spring.security.jwt;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,25 +46,31 @@ public class JwtUtil {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 	
-	public boolean isNotExpired(String token) {
-		Date expDate = extractExpirationDate(token);
-		Date currentDate = new Date();
-		return currentDate.before(expDate);
-	}
+//	public boolean isNotExpired(String token) {
+//		boolean res = true;
+//		try {
+//			extractExpirationDate(token);
+//		} catch (ExpiredJwtException e) {
+//			res = false;
+//		}		
+//		return res;
+//	}
 	
 	public String createToken(UserDetails userDetails) {			
 		return createToken(new HashMap<>(), userDetails);
 	} 
 	
 	public String createToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-		String[] roles = userDetails.getAuthorities().stream().map(auth -> auth.getAuthority()).toArray(String[]::new);	
+		String[] roles = userDetails.getAuthorities().stream().map(auth -> auth.getAuthority().replace("ROLE_", "")).toArray(String[]::new);	
 		extraClaims.put("roles", roles);
 		Date current =  new Date();
 		Date exp = new Date(System.currentTimeMillis() + expPeriod);
 		return Jwts.builder().addClaims(extraClaims).setExpiration(exp).setIssuedAt(current)
 				.setSubject(userDetails.getUsername()).signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
 	}
-	public String[] extractRoles(String token) {
-		return extractClaim(token, claims -> claims.get("roles", String[].class));
+	
+	@SuppressWarnings("unchecked")
+	public List<String> extractRoles(String token) {
+		return (List<String>)extractClaim(token, claims -> claims.get("roles"));
 	}
 }
