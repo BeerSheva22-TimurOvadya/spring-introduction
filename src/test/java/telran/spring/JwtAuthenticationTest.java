@@ -11,17 +11,34 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
 import telran.spring.security.AccountingConfiguration;
-import telran.spring.security.SecurityConfiguration;
+import telran.spring.security.JwtSecurityConfiguration;
+import telran.spring.security.RolesConfiguration;
 import telran.spring.security.jwt.JwtFilter;
 import telran.spring.security.jwt.JwtUtil;
 
-@WebMvcTest({ JwtFilter.class, JwtUtil.class, SecurityConfiguration.class, AccountingConfiguration.class })
+@Configuration
+class RolesConfigurationTest implements RolesConfiguration {
+
+	@Override
+	public void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.authorizeHttpRequests(
+				custom -> custom.requestMatchers(HttpMethod.GET).authenticated().anyRequest().hasRole("ADMIN_TEST"));
+
+	}
+
+}
+
+@WebMvcTest({ JwtFilter.class, JwtUtil.class, JwtSecurityConfiguration.class, AccountingConfiguration.class,
+		RolesConfigurationTest.class })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JwtFilterTest {
+class JwtAuthenticationTest {
 	static String jwt;
 	@Autowired
 	MockMvc mockMvc;

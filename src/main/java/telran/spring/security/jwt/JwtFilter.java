@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				log.trace("security context is established");
 			} catch (Throwable e) {
-				
+				log.error(e.getMessage());
 			}
 		}
 		filterChain.doFilter(request, response);
