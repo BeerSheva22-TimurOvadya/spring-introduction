@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import telran.spring.controller.SenderController;
 import telran.spring.model.Message;
-import telran.spring.security.JwtSecurityConfiguration;
+import telran.spring.security.jwt.JwtSecurityConfiguration;
 import telran.spring.service.Sender;
 @Service
 class MockSender implements Sender {
