@@ -47,6 +47,7 @@ class MockSender implements Sender {
 }
 
 @WithMockUser(roles = { "USER", "ADMIN" }, username = "admin")
+
 @WebMvcTest(controllers = { SenderController.class, MockSender.class, SecurityConfiguration.class }, excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtFilter.class) })
 class SendersControllerTest {
